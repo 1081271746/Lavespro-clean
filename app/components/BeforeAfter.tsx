@@ -4,7 +4,9 @@ const beforeImage =
 const afterImage =
   "https://scontent-bog2-2.xx.fbcdn.net/v/t39.30808-6/552073504_1337481834755425_8702978344296572059_n.jpg?stp=dst-jpg_tt6&cstp=mx387x375&ctp=s387x375&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_ohc=GnmOrxn1BikQ7kNvwGunW1X&_nc_oc=AdqJNG0bprm86Po4HUwwj59RLg3IxhBr7AwZV3N_CnDsAyYMotBCccZRnTh-AuKUVhM&_nc_zt=23&_nc_ht=scontent-bog2-2.xx&_nc_gid=RHPqOZ_ryy1A-4tJyM-2Ew&_nc_ss=7b289&oh=00_AQN1FZKRVedD6h6utkLU76uqFNNyuhD5jB7Dq5NvSZEEHw&oe=6AC1D1A7";
 
+
 export default function BeforeAfter() {
+  
   return (
     <section
       id="trabajos"
