@@ -4,7 +4,7 @@ import Services from "./components/Services";
 import WhyChooseUs from "./components/WhyChooseUs";
 import BeforeAfter from "./components/BeforeAfter";
 import Gallery from "./components/Gallery";
-
+import About from "./components/About";
 export default function Home() {
   return (
     <>
@@ -16,6 +16,7 @@ export default function Home() {
         <WhyChooseUs />
         <BeforeAfter />
         <Gallery />
+        <About />
       </main>
     </>
   );
