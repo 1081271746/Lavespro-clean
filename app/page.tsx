@@ -4,7 +4,10 @@ import Services from "./components/Services";
 import WhyChooseUs from "./components/WhyChooseUs";
 import BeforeAfter from "./components/BeforeAfter";
 import Gallery from "./components/Gallery";
+import Testimonials from "./components/Testimonials";
 import About from "./components/About";
+import QuoteForm from "./components/QuoteForm";
+
 export default function Home() {
   return (
     <>
@@ -17,6 +20,8 @@ export default function Home() {
         <BeforeAfter />
         <Gallery />
         <About />
+        <Testimonials />
+        <QuoteForm />
       </main>
     </>
   );
