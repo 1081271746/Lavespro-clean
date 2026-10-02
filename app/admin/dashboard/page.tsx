@@ -1,4 +1,3 @@
-import Link from "next/link";
 
 const stats = [
   {
@@ -74,172 +73,10 @@ function getStatusStyle(status: string) {
 }
 
 export default function AdminDashboard() {
-  return (
-    <main className="min-h-screen bg-slate-100">
+       return (
+        <div className="min-h-screen bg-slate-100">
 
-      {/* SIDEBAR */}
-      <aside className="fixed left-0 top-0 hidden h-screen w-64 border-r border-slate-800 bg-slate-950 text-white lg:block">
-
-        {/* LOGO */}
-        <div className="flex h-20 items-center border-b border-slate-800 px-6">
-          <div className="flex items-center gap-3">
-
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold">
-              ✦
-            </div>
-
-            <div>
-              <h1 className="text-lg font-bold">
-                Clean<span className="text-blue-500">Pro</span>
-              </h1>
-
-              <p className="text-[10px] font-semibold tracking-widest text-slate-500">
-                ADMIN PANEL
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        {/* NAVEGACIÓN */}
-        <nav className="px-4 py-6">
-
-          <p className="px-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Principal
-          </p>
-
-          <div className="mt-4 space-y-2">
-
-            <Link
-              href="/admin/dashboard"
-              className="flex items-center gap-3 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white"
-            >
-              <span>📊</span>
-              Dashboard
-            </Link>
-
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-slate-400 transition hover:bg-slate-900 hover:text-white">
-              <span>📋</span>
-              Solicitudes
-            </button>
-
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-slate-400 transition hover:bg-slate-900 hover:text-white">
-              <span>👥</span>
-              Clientes
-            </button>
-
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-slate-400 transition hover:bg-slate-900 hover:text-white">
-              <span>🧹</span>
-              Servicios
-            </button>
-
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-slate-400 transition hover:bg-slate-900 hover:text-white">
-              <span>🖼️</span>
-              Trabajos
-            </button>
-
-          </div>
-
-          <p className="mt-10 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Sistema
-          </p>
-
-          <div className="mt-4 space-y-2">
-
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-slate-400 transition hover:bg-slate-900 hover:text-white">
-              <span>⚙️</span>
-              Configuración
-            </button>
-
-            <Link
-              href="/"
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-slate-400 transition hover:bg-slate-900 hover:text-white"
-            >
-              <span>🌐</span>
-              Ver sitio web
-            </Link>
-
-          </div>
-
-        </nav>
-
-        {/* ADMIN */}
-        <div className="absolute bottom-0 left-0 right-0 border-t border-slate-800 p-4">
-
-          <div className="flex items-center gap-3 rounded-xl bg-slate-900 p-3">
-
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-bold">
-              A
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-white">
-                Administrador
-              </p>
-
-              <p className="truncate text-xs text-slate-500">
-                admin@cleanpro.com
-              </p>
-            </div>
-
-          </div>
-
-          <Link
-            href="/admin/login"
-            className="mt-3 flex items-center gap-3 px-3 py-2 text-sm text-slate-400 transition hover:text-red-400"
-          >
-            <span>🚪</span>
-            Cerrar sesión
-          </Link>
-
-        </div>
-
-      </aside>
-
-      {/* CONTENIDO PRINCIPAL */}
-      <div className="lg:ml-64">
-
-        {/* HEADER */}
-        <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/90 backdrop-blur">
-
-          <div className="flex h-20 items-center justify-between px-6 lg:px-8">
-
-            <div>
-              <p className="text-sm text-slate-500">
-                Panel de administración
-              </p>
-
-              <h2 className="text-xl font-bold text-slate-900">
-                Dashboard
-              </h2>
-            </div>
-
-            <div className="flex items-center gap-4">
-
-              <button className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-lg transition hover:bg-slate-50">
-                🔔
-                <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-blue-600" />
-              </button>
-
-              <div className="hidden text-right sm:block">
-                <p className="text-sm font-semibold text-slate-900">
-                  Administrador
-                </p>
-
-                <p className="text-xs text-slate-500">
-                  Gestión general
-                </p>
-              </div>
-
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
-                A
-              </div>
-
-            </div>
-
-          </div>
-
-        </header>
+      
 
         {/* BODY */}
         <div className="p-6 lg:p-8">
@@ -481,6 +318,5 @@ export default function AdminDashboard() {
 
       </div>
 
-    </main>
   );
 }

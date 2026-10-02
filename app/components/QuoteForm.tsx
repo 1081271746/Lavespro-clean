@@ -12,17 +12,165 @@ const services = [
   "Lavado de alfombras",
 ];
 
+const serviceIds: Record<string, number> = {
+  "Limpieza de colchones": 1,
+  "Lavado de peluches": 2,
+  "Lavado de salas": 3,
+  "Tapicería de vehículos": 4,
+  "Mobiliario de oficina": 5,
+  "Lavado de tapetes": 6,
+  "Lavado de alfombras": 7,
+};
+
 interface QuoteFormProps {
   selectedService?: string;
 }
 
 export default function QuoteForm({ selectedService }: QuoteFormProps) {
   const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+const handleSubmit = async (
+  event: FormEvent<HTMLFormElement>
+) => {
+  event.preventDefault();
+
+  setError("");
+  setLoading(true);
+
+  const form = event.currentTarget;
+  const formData = new FormData(form);
+
+  const name = String(formData.get("name") || "").trim();
+  const phone = String(formData.get("phone") || "").trim();
+  const email = String(formData.get("email") || "").trim();
+  const serviceName = String(
+    formData.get("service") || ""
+  );
+  const address = String(
+    formData.get("address") || ""
+  ).trim();
+  const date = String(formData.get("date") || "");
+  const time = String(formData.get("time") || "");
+  const message = String(
+    formData.get("message") || ""
+  ).trim();
+
+  const serviceId = serviceIds[serviceName];
+
+  if (!serviceId) {
+    setError("Selecciona un servicio válido.");
+    setLoading(false);
+    return;
+  }
+
+  if (!name || !phone || !email || !address) {
+    setError(
+      "Completa todos los campos obligatorios."
+    );
+    setLoading(false);
+    return;
+  }
+
+  let requestedDate: string | null = null;
+
+  if (date) {
+    const selectedTime =
+      time === "afternoon"
+        ? "14:00"
+        : "09:00";
+
+    requestedDate = new Date(
+      `${date}T${selectedTime}:00`
+    ).toISOString();
+  }
+
+  try {
+    // 1. Crear la solicitud
+    const response = await fetch(
+      "http://127.0.0.1:8000/service-requests/public",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          service_id: serviceId,
+          requested_date: requestedDate,
+          address,
+          city: "Pasto",
+          notes: message || null,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.detail ||
+          "No fue posible enviar la solicitud."
+      );
+    }
+
+    // 2. Obtener el ID de la solicitud creada
+    const requestId = data.id;
+
+    // 3. Buscar las fotografías seleccionadas
+    const photosInput = form.querySelector(
+      'input[name="photos"]'
+    ) as HTMLInputElement | null;
+
+    const photos = photosInput?.files;
+
+    // 4. Subir las fotografías
+    if (photos && photos.length > 0) {
+      const photosFormData = new FormData();
+
+      Array.from(photos).forEach((photo) => {
+        photosFormData.append("files", photo);
+      });
+
+      const photosResponse = await fetch(
+        `http://127.0.0.1:8000/service-requests/${requestId}/photos`,
+        {
+          method: "POST",
+          body: photosFormData,
+        }
+      );
+
+      const photosData = await photosResponse.json();
+
+      if (!photosResponse.ok) {
+        throw new Error(
+          photosData.detail ||
+            "La solicitud se creó, pero no fue posible subir las fotografías."
+        );
+      }
+    }
+
+    // 5. Mostrar confirmación
     setSubmitted(true);
-  };
+
+    form.reset();
+
+  } catch (error) {
+    console.error(error);
+
+    setError(
+      error instanceof Error
+        ? error.message
+        : "No fue posible enviar la solicitud."
+    );
+
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <section
@@ -185,9 +333,15 @@ export default function QuoteForm({ selectedService }: QuoteFormProps) {
 
             ) : (
 
-              <form onSubmit={handleSubmit}>
+<form onSubmit={handleSubmit}>
 
-                <div className="grid gap-6 sm:grid-cols-2">
+  {error && (
+    <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      {error}
+    </div>
+  )}
+
+  <div className="grid gap-6 sm:grid-cols-2">
 
                   {/* NOMBRE */}
                   <div>
@@ -241,6 +395,7 @@ export default function QuoteForm({ selectedService }: QuoteFormProps) {
                       id="email"
                       name="email"
                       type="email"
+                      required
                       placeholder="correo@ejemplo.com"
                       className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                     />
@@ -415,11 +570,14 @@ export default function QuoteForm({ selectedService }: QuoteFormProps) {
 
                 {/* BOTÓN */}
                 <button
-                  type="submit"
-                  className="mt-8 w-full rounded-full bg-blue-600 px-7 py-4 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
-                >
-                  Solicitar cotización →
-                </button>
+  type="submit"
+  disabled={loading}
+  className="mt-8 w-full rounded-full bg-blue-600 px-7 py-4 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+>
+  {loading
+    ? "Enviando solicitud..."
+    : "Solicitar cotización →"}
+</button>
 
                 <p className="mt-4 text-center text-xs leading-5 text-gray-500">
                   Al enviar esta solicitud aceptas que la empresa pueda
