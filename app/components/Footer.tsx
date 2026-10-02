@@ -1,4 +1,8 @@
+import Link from "next/link";
+
 export default function Footer() {
+
+
   return (
     <footer className="bg-gray-950 text-white">
 
@@ -131,23 +135,30 @@ export default function Footer() {
               © {new Date().getFullYear()} CleanPro. Todos los derechos reservados.
             </p>
 
-            <div className="flex gap-6">
+            <div className="flex flex-wrap gap-6">
 
-              <a
-                href="#contacto"
-                className="transition hover:text-white"
-              >
-                Contacto
-              </a>
+  <a
+    href="#contacto"
+    className="transition hover:text-white"
+  >
+    Contacto
+  </a>
 
-              <a
-                href="#cotizacion"
-                className="transition hover:text-white"
-              >
-                Solicitar cotización
-              </a>
+  <a
+    href="#cotizacion"
+    className="transition hover:text-white"
+  >
+    Solicitar cotización
+  </a>
 
-            </div>
+  <Link
+    href="/admin/login"
+    className="transition hover:text-blue-400"
+  >
+    🔐 Acceso administrativo
+  </Link>
+
+</div>
 
           </div>
 
