@@ -1,8 +1,11 @@
+import Link from "next/link";
+
 const services = [ 
   
   
     {
     title: "Limpieza de colchones",
+    slug: "limpieza-colchones",
     description:
       "Limpieza profunda para eliminar suciedad, manchas y malos olores, ayudando a mantener tus colchones frescos y limpios.",
     image:
@@ -10,6 +13,7 @@ const services = [
   },
   {
     title: "Lavado de peluches",
+    slug: "lavado-peluches",
     description:
       "Limpieza cuidadosa para mantener los peluches en buenas condiciones y eliminar suciedad y malos olores.",
     image:
@@ -17,6 +21,7 @@ const services = [
   },
   {
     title: "Lavado de salas",
+    slug: "lavado-salas",
     description:
       "Recupera la frescura y apariencia de tus muebles mediante procesos profesionales de limpieza y lavado.",
     image:
@@ -24,6 +29,7 @@ const services = [
   },
   {
     title: "Tapicería de vehículos",
+    slug: "tapiceria-vehiculos",
     description:
       "Limpieza especializada para asientos, pisos, puertas y diferentes superficies del interior de tu vehículo.",
     image:
@@ -31,6 +37,7 @@ const services = [
   },
   {
     title: "Mobiliario de oficina",
+    slug: "mobiliario-oficina",
     description:
       "Limpieza profesional de sillas, muebles y diferentes elementos utilizados en espacios empresariales.",
     image:
@@ -38,6 +45,7 @@ const services = [
   },
   {
     title: "Lavado de tapetes",
+    slug: "lavado-tapetes",
     description:
       "Limpieza profunda para eliminar suciedad, manchas y olores, ayudando a conservar tus tapetes.",
     image:
@@ -45,6 +53,7 @@ const services = [
   },
   {
     title: "Lavado de alfombras",
+    slug: "lavado-alfombras",
     description:
       "Procesos especializados de limpieza para alfombras de hogares, oficinas y diferentes espacios.",
     image:
@@ -115,15 +124,15 @@ export default function Services() {
                   {service.description}
                 </p>
 
-                <a
-                  href="#cotizacion"
-                  className="mt-5 inline-flex items-center text-sm font-bold text-blue-600 transition hover:text-blue-800"
-                >
-                  Solicitar este servicio
-                  <span className="ml-2 transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
-                </a>
+<Link
+  href={`/servicios/${service.slug}`}
+  className="mt-5 inline-flex items-center text-sm font-bold text-blue-600 transition"
+>
+  Solicitar este servicio
+  <span className="ml-2 transition-transform group-hover:translate-x-1">
+    →
+  </span>
+</Link>
 
               </div>
             </article>

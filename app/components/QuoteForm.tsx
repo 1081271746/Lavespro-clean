@@ -12,7 +12,11 @@ const services = [
   "Lavado de alfombras",
 ];
 
-export default function QuoteForm() {
+interface QuoteFormProps {
+  selectedService?: string;
+}
+
+export default function QuoteForm({ selectedService }: QuoteFormProps) {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -207,11 +211,12 @@ export default function QuoteForm() {
                   {/* TELEFONO */}
                   <div>
                     <label
-                      htmlFor="phone"
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
-                    >
-                      Teléfono *
-                    </label>
+  htmlFor="phone"
+  className="text-sm font-semibold text-gray-900"
+>
+  Teléfono *
+</label>
+
 
                     <input
                       id="phone"
@@ -227,7 +232,7 @@ export default function QuoteForm() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="text-sm font-semibold text-gray-900"
                     >
                       Correo electrónico
                     </label>
@@ -237,44 +242,63 @@ export default function QuoteForm() {
                       name="email"
                       type="email"
                       placeholder="correo@ejemplo.com"
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                     />
                   </div>
 
-                  {/* SERVICIO */}
-                  <div>
-                    <label
-                      htmlFor="service"
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
-                    >
-                      Servicio *
-                    </label>
+  {/* SERVICIO */}
+{selectedService ? (
+  <div className="sm:col-span-2">
+    <div className="rounded-2xl bg-blue-50 px-5 py-4">
+      <p className="text-sm font-semibold text-blue-600">
+        Servicio seleccionado
+      </p>
 
-                    <select
-                      id="service"
-                      name="service"
-                      required
-                      defaultValue=""
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
-                    >
-                      <option value="" disabled>
-                        Selecciona un servicio
-                      </option>
+      <p className="mt-1 text-lg font-bold text-gray-900">
+        {selectedService}
+      </p>
+    </div>
 
-                      {services.map((service) => (
-                        <option key={service} value={service}>
-                          {service}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+    <input
+      type="hidden"
+      name="service"
+      value={selectedService}
+    />
+  </div>
+) : (
+  <div>
+    <label
+      htmlFor="service"
+      className="text-sm font-semibold text-gray-900"
+    >
+      Servicio *
+    </label>
 
+    <select
+      id="service"
+      name="service"
+      required
+      defaultValue=""
+      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+    >
+      <option value="" disabled>
+        Selecciona un servicio
+      </option>
+
+      {services.map((service) => (
+        <option key={service} value={service}>
+          {service}
+        </option>
+      ))}
+    </select>
+  </div>
+)}
                   {/* DIRECCIÓN */}
                   <div className="sm:col-span-2">
 
                     <label
                       htmlFor="address"
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="text-sm font-semibold text-gray-900"
                     >
                       Dirección *
                     </label>
@@ -285,7 +309,7 @@ export default function QuoteForm() {
                       type="text"
                       required
                       placeholder="Dirección donde se realizará el servicio"
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                     />
 
                   </div>
@@ -295,7 +319,7 @@ export default function QuoteForm() {
 
                     <label
                       htmlFor="date"
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="text-sm font-semibold text-gray-900"
                     >
                       Fecha preferida
                     </label>
@@ -313,7 +337,7 @@ export default function QuoteForm() {
 
                     <label
                       htmlFor="time"
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="text-sm font-semibold text-gray-900"
                     >
                       Horario preferido
                     </label>
@@ -342,7 +366,7 @@ export default function QuoteForm() {
 
                     <label
                       htmlFor="message"
-                      className="mt-2 w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="text-sm font-semibold text-gray-900"
                     >
                       Cuéntanos sobre el servicio
                     </label>
@@ -352,7 +376,7 @@ export default function QuoteForm() {
                       name="message"
                       rows={5}
                       placeholder="Describe brevemente lo que necesitas..."
-                      className="mt-2 w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="mt-2 w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                     />
 
                   </div>
