@@ -33,6 +33,13 @@ type Service = {
   is_active: boolean;
 };
 
+type Work = {
+  id: number;
+  request_id: number;
+  status: string;
+  scheduled_date: string | null;
+};
+
 type RequestForm = {
   client_id: string;
   service_id: string;
@@ -52,8 +59,6 @@ const emptyForm: RequestForm = {
 const statuses = [
   "Pendiente",
   "Confirmada",
-  "En proceso",
-  "Completada",
   "Cancelada",
 ];
 
@@ -61,6 +66,7 @@ export default function SolicitudesPage() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  const [works, setWorks] = useState<Work[]>([]);
 
   const [search, setSearch] = useState("");
 
@@ -96,21 +102,25 @@ export default function SolicitudesPage() {
         Authorization: `Bearer ${token}`,
       };
 
-      const [
-        requestsResponse,
-        clientsResponse,
-        servicesResponse,
-      ] = await Promise.all([
-        fetch("http://127.0.0.1:8000/service-requests/", {
-          headers,
-        }),
-        fetch("http://127.0.0.1:8000/clients/", {
-          headers,
-        }),
-        fetch("http://127.0.0.1:8000/services/", {
-          headers,
-        }),
-      ]);
+const [
+  requestsResponse,
+  clientsResponse,
+  servicesResponse,
+  worksResponse,
+] = await Promise.all([
+  fetch("http://127.0.0.1:8000/service-requests/", {
+    headers,
+  }),
+  fetch("http://127.0.0.1:8000/clients/", {
+    headers,
+  }),
+  fetch("http://127.0.0.1:8000/services/", {
+    headers,
+  }),
+  fetch("http://127.0.0.1:8000/works/", {
+    headers,
+  }),
+]);
 
       if (
         requestsResponse.status === 401 ||
@@ -131,14 +141,15 @@ export default function SolicitudesPage() {
       }
 
       if (
-        !requestsResponse.ok ||
-        !clientsResponse.ok ||
-        !servicesResponse.ok
-      ) {
-        throw new Error(
-          "No se pudieron cargar los datos."
-        );
-      }
+  !requestsResponse.ok ||
+  !clientsResponse.ok ||
+  !servicesResponse.ok ||
+  !worksResponse.ok
+) {
+  throw new Error(
+    "No se pudieron cargar los datos."
+  );
+}
 
       const requestsData =
         await requestsResponse.json();
@@ -149,9 +160,14 @@ export default function SolicitudesPage() {
       const servicesData =
         await servicesResponse.json();
 
+      const worksData =
+        await worksResponse.json();
+
       setRequests(requestsData);
       setClients(clientsData);
       setServices(servicesData);
+      setWorks(worksData);
+
     } catch (err) {
       console.error(err);
 
@@ -178,6 +194,12 @@ export default function SolicitudesPage() {
       (service) => service.id === serviceId
     );
   }
+
+  function getWorkByRequest(requestId: number) {
+  return works.find(
+    (work) => work.request_id === requestId
+  );
+}
 
   const filteredRequests = useMemo(() => {
     const term = search.toLowerCase().trim();
@@ -458,27 +480,21 @@ export default function SolicitudesPage() {
     }).format(new Date(date));
   }
 
-  function statusClass(status: string) {
-    switch (status) {
-      case "Pendiente":
-        return "bg-amber-100 text-amber-700";
+function statusClass(status: string) {
+  switch (status) {
+    case "Pendiente":
+      return "bg-amber-100 text-amber-700";
 
-      case "Confirmada":
-        return "bg-blue-100 text-blue-700";
+    case "Confirmada":
+      return "bg-blue-100 text-blue-700";
 
-      case "En proceso":
-        return "bg-purple-100 text-purple-700";
+    case "Cancelada":
+      return "bg-red-100 text-red-700";
 
-      case "Completada":
-        return "bg-green-100 text-green-700";
-
-      case "Cancelada":
-        return "bg-red-100 text-red-700";
-
-      default:
-        return "bg-slate-100 text-slate-700";
-    }
+    default:
+      return "bg-slate-100 text-slate-700";
   }
+}
 
   return (
     <main className="min-h-screen bg-slate-100">
@@ -613,6 +629,9 @@ export default function SolicitudesPage() {
                     const service =
                       getService(request.service_id);
 
+                    const work =
+                       getWorkByRequest(request.id);  
+
                     return (
                       <tr
                         key={request.id}
@@ -673,33 +692,42 @@ export default function SolicitudesPage() {
                         </td>
 
                         {/* ESTADO */}
-                        <td className="px-6 py-5">
+<td className="px-6 py-5">
 
-                          <select
-                            value={request.status}
-                            onChange={(event) =>
-                              updateStatus(
-                                request,
-                                event.target.value
-                              )
-                            }
-                            className={`rounded-full border-0 px-3 py-1.5 text-xs font-semibold outline-none ${statusClass(
-                              request.status
-                            )}`}
-                          >
+  <div className="flex flex-col items-start gap-2">
 
-                            {statuses.map((status) => (
-                              <option
-                                key={status}
-                                value={status}
-                              >
-                                {status}
-                              </option>
-                            ))}
+    <select
+      value={request.status}
+      onChange={(event) =>
+        updateStatus(
+          request,
+          event.target.value
+        )
+      }
+      className={`rounded-full border-0 px-3 py-1.5 text-xs font-semibold outline-none ${statusClass(
+        request.status
+      )}`}
+    >
+      {statuses.map((status) => (
+        <option
+          key={status}
+          value={status}
+        >
+          {status}
+        </option>
+      ))}
+    </select>
 
-                          </select>
+    {/* TRABAJO ASOCIADO */}
+    {request.status === "Confirmada" && work && (
+      <span className="text-xs font-medium text-blue-600">
+        🧹 Trabajo #{work.id}
+      </span>
+    )}
 
-                        </td>
+  </div>
+
+</td>
 
 {/* ACCIONES */}
 <td className="px-6 py-5">
